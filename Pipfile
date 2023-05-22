@@ -6,6 +6,8 @@ name = "pypi"
 [packages]
 jinja2 = "*"
 gitpython = "*"
+semver = "*"
+wget = "*"
 
 [dev-packages]
 
