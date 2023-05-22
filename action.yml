@@ -1,0 +1,27 @@
+name: 'Update Wrapdb action'
+description: 'Update the wrapdb with a github release from a github action.'
+inputs:
+  source-repository:
+    description: 'The repository that has a new release'
+    required: true
+  project-name:
+    description: 'An override for the project name (default is the repo name)'
+    required: false
+    default: ''
+  release-tag:
+    description: 'The tag associated with the new release'
+    required: true
+  push-repository:
+    description: 'The repository where the changes are pushed to and the pr is opened from.'
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+        cache: 'pipenv'
+    - name: Install pipenv
+      run: curl https://raw.githubusercontent.com/pypa/pipenv/master/get-pipenv.py | python
+    - run: pipenv install

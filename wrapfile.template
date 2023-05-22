@@ -1,0 +1,10 @@
+[wrap-file]
+directory = {{ project.name }}-{{ project.version }}
+source_url = {{ project.url }}/archive/refs/tags/{{ project.tag }}.tar.gz
+source_filename = {{ project.name }}-{{ project.version }}.tar.gz
+source_hash = {{ project.hash }}
+
+[provide]
+{% for provided in project.provides %}
+{{ provided }}
+{% endfor %}
