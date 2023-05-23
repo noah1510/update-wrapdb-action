@@ -1,6 +1,6 @@
 import argparse
 
-import create_wrap_update
+import wrap_project_class
 
 if __name__ == "__main__":
     # define the message that will be displayed when the user runs the script with the -h flag
@@ -71,7 +71,7 @@ if __name__ == "__main__":
         project_provides = [args['provides']]
 
     # create the WrapProject object
-    project = create_wrap_update.WrapProject(
+    project = wrap_project_class.WrapProject(
         args['source_url'],
         args['tag'],
         project_provides,

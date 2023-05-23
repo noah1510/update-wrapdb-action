@@ -1,0 +1,8 @@
+{
+  "unit-system" : {
+    "URL": "https://github.com/noah1510/unit-system",
+    "provides": [
+      "unit-system = unit_system_dep"
+    ]
+  }
+}

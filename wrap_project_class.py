@@ -18,6 +18,8 @@ class WrapProject(Dict):
         push_url: str,
         project_name: str = '',
         allow_cloned_repos: bool = True,
+        increment_build_number: bool = True,
+        skip_wrapdb_update: bool = False,
     ):
         super().__init__()
 
@@ -62,21 +64,26 @@ class WrapProject(Dict):
             raise Exception("No provides specified")
 
         # check if the push url is valid
-        try:
-            if allow_cloned_repos and os.path.isdir('wrapdb'):
-                push_repo = git.Repo('wrapdb')
-                push_repo.git.fetch('--all')
-            else:
-                push_repo = git.Repo.clone_from(push_url, 'wrapdb')
-        except git.exc.GitCommandError:
-            raise Exception("Error cloning push repo")
+        if not skip_wrapdb_update:
+            try:
+                if allow_cloned_repos and os.path.isdir('wrapdb'):
+                    push_repo = git.Repo('wrapdb')
+                    push_repo.git.fetch('--all')
+                else:
+                    push_repo = git.Repo.clone_from(push_url, 'wrapdb')
+            except git.exc.GitCommandError:
+                raise Exception("Error cloning push repo")
+        else:
+            push_repo = git.Repo('wrapdb')
 
         # add upstream project as remote
         try:
-            if 'upstream' not in push_repo.remotes:
-                git.Remote.add(repo=push_repo, name='upstream', url='https://github.com/mesonbuild/wrapdb')
+            if not skip_wrapdb_update:
+                if 'upstream' not in push_repo.remotes:
+                    git.Remote.add(repo=push_repo, name='upstream', url='https://github.com/mesonbuild/wrapdb')
 
-            push_repo.git.fetch('upstream')
+                push_repo.git.fetch('upstream')
+
             push_repo.git.checkout('-B', 'upstream/master')
         except git.exc.GitCommandError:
             raise Exception("Error adding upstream remote")
@@ -95,12 +102,11 @@ class WrapProject(Dict):
 
         # create a new branch from upstream/master
         try:
+            self.increment_build_number = increment_build_number
             self.push_branch = 'update-' + project_name
             self.push_branch += '-' + self["version"]
             self.push_branch += '-' + str(self.get_next_build_number())
             push_repo.git.checkout('-B', self.push_branch)
-
-            push_repo.git.rebase('upstream/master')
         except git.exc.GitCommandError:
             raise Exception("Error while branching or updating the branch")
 
@@ -146,11 +152,19 @@ class WrapProject(Dict):
 
         try:
             versions = release["versions"]
+            project_version = semver.VersionInfo.parse(self["version"])
 
             for version in versions:
                 semantic_version = semver.VersionInfo.parse(version)
-                if semantic_version.finalize_version() == self["version"]:
-                    return int(semantic_version.bump_prerelease().prerelease)
+
+                if project_version < semantic_version:
+                    raise Exception("Version is lower than the latest version in releases.json")
+
+                if semantic_version.finalize_version() == project_version.finalize_version():
+                    if self.increment_build_number:
+                        return int(semantic_version.bump_prerelease().prerelease)
+                    else:
+                        raise Exception("Version already exists in releases.json")
 
         except ValueError:
             raise Exception("Error parsing tag as semantic version")
