@@ -1,10 +1,9 @@
 [wrap-file]
-directory = {{ name }}-{{ name }}
+directory = {{ name }}-{{ version }}
 source_url = {{ archive_url }}
 source_filename = {{ archive_filename }}
 source_hash = {{ archive_sha256 }}
 
 [provide]
-{% for provided in provides %}
-{{ provided }}
+{% for provided in provides %}{{ provided }}
 {% endfor %}

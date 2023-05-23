@@ -80,5 +80,5 @@ if __name__ == "__main__":
     )
 
     # create the wrap file
-    project.create_wrap_file()
-
+    project.update_wrapdb_repo()
+    project.commit_and_push_wrapdb()
