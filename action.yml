@@ -60,4 +60,5 @@ runs:
       shell: bash
       run: |
         cd ${{ github.action_path }}/wrapdb
+        python3 -m pip install meson ninja
         python3 tools/sanity_checks.py
