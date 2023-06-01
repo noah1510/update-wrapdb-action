@@ -43,10 +43,10 @@ runs:
       env:
         GH_TOKEN: ${{ inputs.github_token }}
       run: |
-        gh auth status
-        cd ${{ github.action_path }}
         git config --global user.email "${{ inputs.push-email }}"
         git config --global user.name "GitHub Action"
+        gh auth status
+        cd ${{ github.action_path }}
         pipenv run python update_repo.py \
           --url "${{ inputs.source-repository }}" \
           --name "${{ inputs.project-name }}" \
