@@ -36,10 +36,12 @@ runs:
         pipenv install
     - name: Run the update script
       shell: bash
+      env: GH_TOKEN: ${{ inputs.github_token }}
       run: |
-        gh auth login --with-token ${{ inputs.github_token }}
+        gh auth login
         cd ${{ github.action_path }}
-        pipenv run python update_wrapdb.py \
+        pipenv shell
+        python update_wrapdb.py \
           --url "${{ inputs.source-repository }}" \
           --name "${{ inputs.project-name }}" \
           --tag "${{ inputs.release-tag }}" \
