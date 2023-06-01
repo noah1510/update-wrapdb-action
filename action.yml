@@ -45,7 +45,7 @@ runs:
           --url "${{ inputs.source-repository }}" \
           --name "${{ inputs.project-name }}" \
           --tag "${{ inputs.release-tag }}" \
-          --push-url "${{ inputs.push-repository }}"
+          --push-url "${{ inputs.push-repository }}" \
           --provides "${{ inputs.provides }}"
     - name: Run the sanity checks
       shell: bash
