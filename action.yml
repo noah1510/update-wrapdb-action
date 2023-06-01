@@ -40,11 +40,11 @@ runs:
         gh auth login --with-token ${{ inputs.github_token }}
         cd ${{ github.action_path }}
         pipenv run python update_wrapdb.py \
-          --url ${{ inputs.source-repository }} \
-          --name ${{ inputs.project-name }} \
-          --tag ${{ inputs.release-tag }} \
-          --push-url ${{ inputs.push-repository }}
-          --provides ${{ inputs.provides }}
+          --url "${{ inputs.source-repository }}" \
+          --name "${{ inputs.project-name }}" \
+          --tag "${{ inputs.release-tag }}" \
+          --push-url "${{ inputs.push-repository }}"
+          --provides "${{ inputs.provides }}"
     - name: Run the sanity checks
       shell: bash
       run: |
