@@ -61,6 +61,15 @@ if __name__ == "__main__":
         dest='name_override',
         type=str,
     )
+    
+    parser.add_argument(
+        "--no-push",
+        help="Do not push changes after creating the commit",
+        required=False,
+        default=True,
+        dest='push_changes',
+        action='store_false',
+    )
 
     args = vars(parser.parse_args())
 
@@ -81,4 +90,6 @@ if __name__ == "__main__":
 
     # create the wrap file
     project.update_wrapdb_repo()
-    project.commit_and_push_wrapdb()
+    project.commit_wrapdb()
+    if args['push_changes']:
+        project.push_wrapdb()

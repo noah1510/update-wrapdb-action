@@ -47,12 +47,14 @@ runs:
         git config --global user.name "GitHub Action"
         gh auth status
         cd ${{ github.action_path }}
-        pipenv run python update_repo.py \
+        pipenv run python update_repo.py --no-push \
           --url "${{ inputs.source-repository }}" \
           --name "${{ inputs.project-name }}" \
           --tag "${{ inputs.release-tag }}" \
           --push-url "${{ inputs.push-repository }}" \
           --provides "${{ inputs.provides }}"
+        cd wrapdb
+        git push
     - name: Run the sanity checks
       shell: bash
       run: |

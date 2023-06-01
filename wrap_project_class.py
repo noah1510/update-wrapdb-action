@@ -194,7 +194,7 @@ class WrapProject(Dict):
         releases_file.write('\n')
         releases_file.close()
 
-    def commit_and_push_wrapdb(self):
+    def commit_wrapdb(self):
         push_repo = git.Repo('wrapdb')
 
         wrap_file_path = os.path.join('subprojects', self["name"] + '.wrap')
@@ -202,4 +202,7 @@ class WrapProject(Dict):
         push_repo.git.add('releases.json')
 
         push_repo.git.commit('-m', 'Update ' + self["name"] + ' to ' + self["version"])
+
+    def push_wrapdb(self):
+        push_repo = git.Repo('wrapdb')
         push_repo.git.push('origin', self.push_branch)
