@@ -37,7 +37,7 @@ runs:
     - name: Run the update script
       shell: bash
       env:
-        - GH_TOKEN: ${{ inputs.github_token }}
+        GH_TOKEN: ${{ inputs.github_token }}
       run: |
         gh auth login
         cd ${{ github.action_path }}
