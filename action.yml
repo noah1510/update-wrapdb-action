@@ -30,6 +30,7 @@ runs:
       with:
         python-version: '3.11'
         cache: 'pipenv'
+        cache-dependency-path: ${{ github.action_path }}/Pipfile.lock
     - name: Install dependencies
       shell: bash
       run: pipenv install
@@ -37,7 +38,7 @@ runs:
       shell: bash
       run: |
         gh auto login --with-token ${{ inputs.github_token }}
-        pipenv run python update_wrapdb.py \
+        pipenv run python ${{ github.action_path }}/update_wrapdb.py \
           --url ${{ inputs.source-repository }} \
           --name ${{ inputs.project-name }} \
           --tag ${{ inputs.release-tag }} \
