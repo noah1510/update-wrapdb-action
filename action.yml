@@ -54,7 +54,7 @@ runs:
           --push-url "${{ inputs.push-repository }}" \
           --provides "${{ inputs.provides }}"
         cd wrapdb
-        git push
+        git push --set-upstream origin $(git rev-parse --abbrev-ref HEAD)
     - name: Run the sanity checks
       shell: bash
       run: |
