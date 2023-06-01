@@ -23,22 +23,23 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Install pipenv
-      shell: bash
-      run: curl https://raw.githubusercontent.com/pypa/pipenv/master/get-pipenv.py | python
     - uses: actions/setup-python@v4
       with:
         python-version: '3.11'
-        cache: 'pipenv'
-        cache-dependency-path: ${{ github.action_path }}/Pipfile.lock
+    - name: Install pipenv
+      shell: bash
+      run: curl https://raw.githubusercontent.com/pypa/pipenv/master/get-pipenv.py | python
     - name: Install dependencies
       shell: bash
-      run: pipenv install
+      run: |
+        cd ${{ github.action_path }}
+        pipenv install
     - name: Run the update script
       shell: bash
       run: |
         gh auto login --with-token ${{ inputs.github_token }}
-        pipenv run python ${{ github.action_path }}/update_wrapdb.py \
+        cd ${{ github.action_path }}
+        pipenv run python update_wrapdb.py \
           --url ${{ inputs.source-repository }} \
           --name ${{ inputs.project-name }} \
           --tag ${{ inputs.release-tag }} \
@@ -47,5 +48,5 @@ runs:
     - name: Run the sanity checks
       shell: bash
       run: |
-        cd wrapdb
+        cd ${{ github.action_path }}/wrapdb
         python3 tools/sanity_checks.py
