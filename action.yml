@@ -41,8 +41,7 @@ runs:
       run: |
         gh auth status
         cd ${{ github.action_path }}
-        pipenv shell
-        python update_wrapdb.py \
+        pipenv run python update_wrapdb.py \
           --url "${{ inputs.source-repository }}" \
           --name "${{ inputs.project-name }}" \
           --tag "${{ inputs.release-tag }}" \
