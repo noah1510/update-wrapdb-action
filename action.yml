@@ -37,7 +37,7 @@ runs:
     - name: Run the update script
       shell: bash
       run: |
-        gh auto login --with-token ${{ inputs.github_token }}
+        gh auth login --with-token ${{ inputs.github_token }}
         cd ${{ github.action_path }}
         pipenv run python update_wrapdb.py \
           --url ${{ inputs.source-repository }} \
