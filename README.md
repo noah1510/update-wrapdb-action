@@ -47,6 +47,12 @@ The sanity checks will fail if the provided dependencies do not match the ones i
 **Required** The repository to push the changes to.
 This is also the repository that will be used to open the PR.
 
+
+#### `push-repository`
+
+**Optional** The email used for the automatic commit in the push repository.
+The default is `github-action@users.noreply.github.com`.
+
 #### `github_token`
 
 **Required** The github token to use to push the changes and open the PR.
@@ -70,7 +76,7 @@ jobs:
       uses: noah1510/update-wrapdb-action@latest
       with:
         source-repository: "https://github.com/noah1510/unit-system"
-        release-tag: ${{ github.ref }}
+        release-tag: ${{ github.ref_name }}
         provides: "unit-system = unit_system_dep"
         push-repository: "https://github.com/noah1510/wrapdb"
         github_token: ${{ secrets.GITHUB_TOKEN }}

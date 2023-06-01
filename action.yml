@@ -17,6 +17,10 @@ inputs:
   push-repository:
     description: 'The repository where the changes are pushed to and the pr is opened from.'
     required: true
+  push-email:
+    description: 'The email used for the automatic commit in the push repository.'
+    required: false
+    default: 'github-action@users.noreply.github.com'
   github_token:
     description: 'The github token used to open the pr and push to the push repository.'
     required: true
@@ -41,6 +45,8 @@ runs:
       run: |
         gh auth status
         cd ${{ github.action_path }}
+        git config --global user.email "${{ inputs.push-email }}"
+        git config --global user.name "GitHub Action"
         pipenv run python update_repo.py \
           --url "${{ inputs.source-repository }}" \
           --name "${{ inputs.project-name }}" \
