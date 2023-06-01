@@ -46,6 +46,7 @@ runs:
         git config --global user.email "${{ inputs.push-email }}"
         git config --global user.name "GitHub Action"
         gh auth status
+        gh auth setup-git
         cd ${{ github.action_path }}
         pipenv run python update_repo.py --no-push \
           --url "${{ inputs.source-repository }}" \
