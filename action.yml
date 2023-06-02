@@ -24,6 +24,10 @@ inputs:
   github_token:
     description: 'The github token used to open the pr and push to the push repository.'
     required: true
+  run_sanity_checks:
+    description: 'run the wrapdb sanity checks after uploading the new commit'
+    required: false
+    default: 'false'
 runs:
   using: "composite"
   steps:
@@ -56,6 +60,7 @@ runs:
           --provides "${{ inputs.provides }}"
     - name: Run the sanity checks
       shell: bash
+      if: ${{ inputs.run_sanity_checks != 'false' }}
       run: |
         cd ${{ github.action_path }}/wrapdb
         python3 -m pip install meson ninja
