@@ -70,7 +70,7 @@ class WrapProject(Dict):
                     push_repo = git.Repo('wrapdb')
                     push_repo.git.fetch('--all')
                 else:
-                    push_repo = git.Repo.clone_from(push_url, 'wrapdb')
+                    push_repo = git.Repo.clone_from(url='https://github.com/mesonbuild/wrapdb', to_path='wrapdb', depth=1)
             except git.exc.GitCommandError:
                 raise Exception("Error cloning push repo")
         else:
@@ -79,12 +79,11 @@ class WrapProject(Dict):
         # add upstream project as remote
         try:
             if not skip_wrapdb_update:
-                if 'upstream' not in push_repo.remotes:
-                    git.Remote.add(repo=push_repo, name='upstream', url='https://github.com/mesonbuild/wrapdb')
+                if 'push_remote' not in push_repo.remotes:
+                    git.Remote.add(repo=push_repo, name='push_remote', url=push_url)
 
-                push_repo.git.fetch('upstream')
+                push_repo.git.fetch('push_remote')
 
-            push_repo.git.checkout('-B', 'upstream/master')
         except git.exc.GitCommandError:
             raise Exception("Error adding upstream remote")
 
@@ -205,4 +204,4 @@ class WrapProject(Dict):
 
     def push_wrapdb(self):
         push_repo = git.Repo('wrapdb')
-        push_repo.git.push('origin', self.push_branch)
+        push_repo.git.push('push_remote', self.push_branch)

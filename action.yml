@@ -48,14 +48,12 @@ runs:
         gh auth status
         gh auth setup-git
         cd ${{ github.action_path }}
-        pipenv run python update_repo.py --no-push \
+        pipenv run python update_repo.py \
           --url "${{ inputs.source-repository }}" \
           --name "${{ inputs.project-name }}" \
           --tag "${{ inputs.release-tag }}" \
           --push-url "${{ inputs.push-repository }}" \
           --provides "${{ inputs.provides }}"
-        cd wrapdb
-        git push --set-upstream origin $(git rev-parse --abbrev-ref HEAD)
     - name: Run the sanity checks
       shell: bash
       run: |
